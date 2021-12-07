@@ -9,11 +9,12 @@ import './index.less';
 import nebulaLogo from '@/static/images/nebula_logo.png';
 import { RouteComponentProps } from 'react-router-dom';
 import { IDispatch, IRootState } from '@/store';
+import { LanguageContext } from '@/context';
 const FormItem = Form.Item;
 
 const fomrItemLayout = {
   wrapperCol: {
-    span: 24 
+    span: 24
   },
 };
 
@@ -31,7 +32,7 @@ const mapDispatch: any = (dispatch: IDispatch) => ({
 
 interface IProps extends ReturnType<typeof mapState>,
   ReturnType<typeof mapDispatch>,
-  RouteComponentProps{
+  RouteComponentProps {
 }
 class ConfigServerForm extends React.Component<IProps> {
 
@@ -42,12 +43,12 @@ class ConfigServerForm extends React.Component<IProps> {
 
   onConfig = async (values: any) => {
     const { connection } = this.props;
-    const ok = await this.props.asyncLogin({ ip: connection.ip, port:  connection.port, ...values });
+    const ok = await this.props.asyncLogin({ ip: connection.ip, port: connection.port, ...values });
     if (ok) {
       this.props.history.push('/machine/overview');
     }
   };
-  render(){
+  render() {
     const { appVersion } = this.props;
     return (
       <div className="page-login">
@@ -57,10 +58,10 @@ class ConfigServerForm extends React.Component<IProps> {
           <p className="form-header">{intl.get('common.account')}</p>
           <Form layout="horizontal" {...fomrItemLayout} onFinish={this.onConfig}>
             <FormItem name="username" rules={usernameRulesFn(intl)}>
-              <Input placeholder={intl.get('common.username')} bordered={false}/>
+              <Input placeholder={intl.get('common.username')} bordered={false} />
             </FormItem>
             <FormItem name="password" rules={passwordRulesFn(intl)}>
-              <Input type="password" placeholder={intl.get('common.password')} bordered={false}/>
+              <Input type="password" placeholder={intl.get('common.password')} bordered={false} />
             </FormItem>
             <Button className="btn-submit" type="primary" htmlType="submit">
               {intl.get('common.login')}
@@ -68,7 +69,15 @@ class ConfigServerForm extends React.Component<IProps> {
           </Form>
           <div className="footer">
             <span className="version">{intl.get('common.version')}：{appVersion}</span>
-            <LanguageSelect showIcon={true} />
+            <LanguageContext.Consumer>
+              {({ currentLocale, toggleLanguage }) => (
+                <LanguageSelect
+                  showIcon
+                  currentLocale={currentLocale}
+                  toggleLanguage={toggleLanguage}
+                />
+              )}
+            </LanguageContext.Consumer>
           </div>
         </div>
       </div>

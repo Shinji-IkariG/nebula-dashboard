@@ -19,6 +19,7 @@ import {
 import { MenuList, RoutesList } from './routes';
 import './index.less';
 import Header from './Header';
+import { LanguageContext } from '@/context';
 const { Sider, Content } = Layout;
 const { SubMenu } = Menu;
 
@@ -122,7 +123,16 @@ class MainPage extends React.Component<IProps, IState> {
               <Icon className="menu-btn" icon="#iconnav-logout" />
               {!collapsed && <span className="text-logout">{intl.get('common.logout')}</span>}
             </div>
-            <LanguageSelect mode="dark" showIcon={!collapsed} />
+            <LanguageContext.Consumer>
+                {({ currentLocale, toggleLanguage }) => (
+                  <LanguageSelect
+                    mode="dark" 
+                    showIcon={!collapsed}
+                    currentLocale={currentLocale}
+                    toggleLanguage={toggleLanguage}
+                  />
+                )}
+              </LanguageContext.Consumer>
             <div className="row">
               {!collapsed && <span className="version">v {appVersion}</span>}
               {!collapsed && 
